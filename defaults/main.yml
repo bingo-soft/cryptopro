@@ -1,0 +1,27 @@
+---
+
+cprocsp_version: 5.0
+cprocsp_subversion: 11455
+
+dependency_packages:
+  - boost-devel
+  - php-devel
+  - lsb
+  - gcc-c++
+  - unzip
+
+cprocsp_packages:
+  - "/tmp/linux-amd64/lsb-cprocsp-base-{{ cprocsp_version }}.{{ cprocsp_subversion }}-5.noarch.rpm"
+  - "/tmp/linux-amd64/lsb-cprocsp-rdr-64-{{ cprocsp_version }}.{{ cprocsp_subversion }}-5.x86_64.rpm"
+  - "/tmp/linux-amd64/lsb-cprocsp-kc1-64-{{ cprocsp_version }}.{{ cprocsp_subversion }}-5.x86_64.rpm"
+  - "/tmp/linux-amd64/lsb-cprocsp-capilite-64-{{ cprocsp_version }}.{{ cprocsp_subversion }}-5.x86_64.rpm"
+  - "/tmp/linux-amd64/lsb-cprocsp-ca-certs-{{ cprocsp_version }}.{{ cprocsp_subversion }}-5.noarch.rpm"
+
+cprocsp_packages_sdk:
+  - /tmp/cades_linux_amd64/cprocsp-pki-2.0.0-amd64-cades.rpm
+  - /tmp/cades_linux_amd64/cprocsp-pki-2.0.0-amd64-phpcades.rpm
+  - /tmp/cades_linux_amd64/lsb-cprocsp-devel-5.0.11535-4.noarch.rpm
+
+url_php7_support_patch: https://www.cryptopro.ru/sites/default/files/products/cades/php7_support.patch.zip
+
+...
