@@ -3,7 +3,7 @@
 cprocsp_version: 5.0
 cprocsp_subversion: 11455
 
-dependency_packages:
+dependency_packages_libphpcades_module_make:
   - boost-devel
   - php-devel
   - lsb
@@ -22,6 +22,8 @@ cprocsp_packages_sdk:
   - /tmp/cades_linux_amd64/cprocsp-pki-2.0.0-amd64-phpcades.rpm
   - /tmp/cades_linux_amd64/lsb-cprocsp-devel-5.0.11535-4.noarch.rpm
 
+url_cprocsp: "{{ url }}://{{ FTP_USER }}:{{ FTP_PASSWORD }}@{{ remote_path_ftp }}/linux-amd64.tgz"
+url_cprocsp_sdk: "{{ url }}://{{ FTP_USER }}:{{ FTP_PASSWORD }}@{{ remote_path_ftp }}/cades_linux_amd64.tar.gz"
 url_php7_support_patch: https://www.cryptopro.ru/sites/default/files/products/cades/php7_support.patch.zip
 
 ...

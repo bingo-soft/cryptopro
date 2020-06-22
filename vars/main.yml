@@ -2,9 +2,9 @@
 # Cryptopro vars for download packages and license key
 
 # Uncomment variables and set your values
-#url: ftp
-#FTP_USER:
-#FTP_PASSWORD:
-#remote_path_ftp:
+FTP_USER:
+FTP_PASSWORD:
+remote_path_ftp:
+url: ftp
 
 #cprocsp_key:

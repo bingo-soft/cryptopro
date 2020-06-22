@@ -1,0 +1,94 @@
+---
+
+#### Install cryptopro
+- name: Install dependency packages for libphpcades module
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ dependency_packages_libphpcades_module_make }}"
+
+- name: Download and Unarchive cryptopro sdk files
+  unarchive:
+    src: "{{ item }}"
+    dest: /tmp
+    remote_src: yes
+  loop:
+    - "{{ url_cprocsp_sdk }}"
+
+- name: Install cprocsp_sdk packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "{{ cprocsp_packages_sdk }}"
+
+#### Install module libphpcades.so
+- name: Exchange env PHPDIR to file Makefile.unix
+  lineinfile:
+    dest: /opt/cprocsp/src/phpcades/Makefile.unix
+    regexp: '^PHPDIR='
+    line: 'PHPDIR=/usr/include/php'
+    state: present
+
+- name: Download and Unarchive file php7_support.patch.zip
+  unarchive:
+    src: "{{ url_php7_support_patch }}"
+    dest: /opt/cprocsp/src/phpcades
+    remote_src: yes
+
+- name: execute patch php7_support.patch
+  shell: 'cd /opt/cprocsp/src/phpcades && patch -p0 < ./php7_support.patch'
+
+- name: Make module - libphpcades
+  shell: 'cd /opt/cprocsp/src/phpcades && eval `/opt/cprocsp/src/doxygen/CSP/../setenv.sh --64`; make -f Makefile.unix'
+  register: libphpcades
+
+- debug:
+    msg="{{ libphpcades.stdout_lines }}"
+
+- name: Symlink /opt/cprocsp/src/phpcades/libphpcades.so to /usr/lib64/php/modules/libphpcades.so
+  file:
+    state: link
+    src: /opt/cprocsp/src/phpcades/libphpcades.so
+    dest: /usr/lib64/php/modules/libphpcades.so
+    force: yes
+
+- name: Create file /etc/php.d/libphpcades.ini
+  file:
+    path: /etc/php.d/libphpcades.ini
+    state: touch
+
+- name: Insert line a file /etc/php.d/libphpcades.ini
+  lineinfile:
+    path: /etc/php.d/libphpcades.ini
+    line: extension=libphpcades.so
+
+- name: Echo module libphpcades - php_CPCSP
+  shell: php -m | grep php_CPCSP
+  register: php_CPCSP
+
+- debug:
+    msg="php -m | grep php_CPCSP == {{ php_CPCSP.stdout_lines }}. Module libphpcades - enabled"
+
+### Create add files
+- name: Create file /opt/cprocsp/21-phpcades.ini
+  file:
+    path: /opt/cprocsp/21-phpcades.ini
+    state: touch
+
+- name: Insert line a file /opt/cprocsp/21-phpcades.ini
+  lineinfile:
+    path: /opt/cprocsp/21-phpcades.ini
+    line: extension=/opt/cprocsp/src/phpcades/libphpcades.so
+
+- name: Create file /opt/cprocsp/cprocsp-ld.conf
+  file:
+    path: /opt/cprocsp/cprocsp-ld.conf
+    state: touch
+
+- name: Insert line a file /opt/cprocsp/cprocsp-ld.conf
+  lineinfile:
+    path: /opt/cprocsp/cprocsp-ld.conf
+    line: /opt/cprocsp/lib/amd64
+
+...
