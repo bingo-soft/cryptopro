@@ -39,6 +39,14 @@
 - name: execute patch php7_support.patch
   shell: 'cd /opt/cprocsp/src/phpcades && patch -p0 < ./php7_support.patch'
 
+- name: Fix CentOS 8 | Change a str comment /usr/include/linux/stat.h
+  lineinfile:
+    dest: /usr/include/linux/stat.h
+    regexp: '^\s+__s32\s+__reserved\;$'
+    line: '/*        __s32__reserved; */'
+    state: present
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "8"
+
 - name: Make module - libphpcades
   shell: 'cd /opt/cprocsp/src/phpcades && eval `/opt/cprocsp/src/doxygen/CSP/../setenv.sh --64`; make -f Makefile.unix'
   register: libphpcades

@@ -1,5 +1,11 @@
 ---
 
+- name: Install dependency packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ dependency_packages }}"
+
 #### Install cryptopro
 - name: Download and Unarchive cryptopro
   unarchive:
